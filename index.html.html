@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dripify Outreach Dashboard — Human Digital</title>
+<style>
+  :root{
+    --bg:#0f1117; --panel:#171a23; --panel2:#1e2230; --line:#2a2f3e;
+    --text:#e8eaf0; --muted:#9aa3b2; --accent:#6c5ce7; --accent2:#00b894;
+    --warn:#e17055; --chip:#252a3a;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    background:var(--bg);color:var(--text);line-height:1.5;padding:32px 28px 64px}
+  .wrap{max-width:1180px;margin:0 auto}
+  header.top{display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:12px;margin-bottom:8px}
+  h1{font-size:25px;margin:0;font-weight:700;letter-spacing:-.3px}
+  .sub{color:var(--muted);font-size:13px;margin-top:4px}
+  .meta{color:var(--muted);font-size:12px;text-align:right}
+  .meta b{color:var(--text)}
+  .filters{display:flex;flex-wrap:wrap;gap:22px;background:var(--panel);border:1px solid var(--line);
+    border-radius:14px;padding:15px 18px;margin:22px 0 4px}
+  .fgroup{display:flex;align-items:center;gap:10px}
+  .fgroup .flabel{font-size:11px;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);font-weight:600}
+  .seg{display:inline-flex;background:var(--panel2);border:1px solid var(--line);border-radius:9px;padding:3px}
+  .seg button{background:none;border:none;color:var(--muted);font-size:12.5px;font-weight:600;
+    padding:6px 12px;border-radius:6px;cursor:pointer;font-family:inherit;transition:.15s}
+  .seg button:hover{color:var(--text)}
+  .seg button.on{background:var(--accent);color:#fff}
+  .seg button.on.reg{background:#0984e3}
+  .seg button.on.acct{background:#0b8457}
+  .reset{margin-left:auto;align-self:center;background:none;border:1px solid var(--line);color:var(--muted);
+    font-size:12px;padding:6px 12px;border-radius:8px;cursor:pointer;font-family:inherit}
+  .reset:hover{color:var(--text);border-color:var(--muted)}
+  .scope-note{font-size:12px;color:var(--muted);margin:10px 2px 0}
+  .scope-note b{color:var(--text)}
+  .grid{display:grid;gap:16px}
+  .kpis{grid-template-columns:repeat(4,1fr);margin:18px 0 4px}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px 20px}
+  .kpi .label{color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.5px}
+  .kpi .val{font-size:30px;font-weight:700;margin-top:6px}
+  .kpi .note{color:var(--muted);font-size:11px;margin-top:4px}
+  .accent{color:var(--accent)} .green{color:var(--accent2)}
+  section{margin-top:26px}
+  h2{font-size:16px;margin:0 0 14px;font-weight:650}
+  .charts{grid-template-columns:1fr 1fr}
+  .chart-card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px}
+  .chart-card h3{margin:0 0 12px;font-size:13px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.4px}
+  .bars{display:flex;flex-direction:column;gap:9px}
+  .bar-row{display:grid;grid-template-columns:190px 1fr 46px;align-items:center;gap:10px;font-size:11.5px}
+  .bar-row.cat{grid-template-columns:188px 1fr 30px}
+  .bar-row .bname{color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .bar-track{background:var(--panel2);border-radius:5px;height:14px;overflow:hidden}
+  .bar-fill{height:100%;border-radius:5px;min-width:2px;transition:width .4s}
+  .bar-row .bval{text-align:right;font-variant-numeric:tabular-nums;color:var(--text);font-weight:600}
+  .empty{color:var(--muted);font-size:13px;padding:18px;text-align:center;font-style:italic}
+  table{width:100%;border-collapse:collapse;background:var(--panel);border:1px solid var(--line);border-radius:14px;overflow:hidden;font-size:13px}
+  th,td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--line)}
+  th{background:var(--panel2);color:var(--muted);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.4px}
+  td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+  tbody tr:last-child td{border-bottom:none}
+  tbody tr:hover{background:#1b1f2c}
+  .pill{display:inline-block;padding:2px 8px;border-radius:999px;font-size:10.5px;font-weight:600;background:var(--chip)}
+  .reg-NZ{color:#74b9ff} .reg-AU{color:#ffeaa7}
+  .aud-Founder{color:#a29bfe} .aud-Marketing{color:#55efc4} .aud-EOFY{color:#fab1a0}
+  .acct-Ben{color:#81ecec} .acct-Nora{color:#fd79a8}
+  .insight{background:var(--panel2);border:1px solid var(--line);border-left:3px solid var(--accent2);border-radius:10px;padding:13px 16px;font-size:13px;color:var(--text);margin-bottom:18px}
+  .insight b{color:#fff}
+  .clist{display:grid;gap:14px;margin-top:20px}
+  .cat-group h4{margin:0 0 9px;font-size:12px;text-transform:uppercase;letter-spacing:.5px;display:flex;align-items:center;gap:8px}
+  .dot{width:9px;height:9px;border-radius:50%;display:inline-block}
+  .cat-count{color:var(--muted);font-weight:500}
+  .rcards{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .rcard{background:var(--panel);border:1px solid var(--line);border-radius:11px;padding:13px 15px}
+  .rcard.win{border-color:#00b894;box-shadow:0 0 0 1px #00b89433}
+  .rcard .rh{display:flex;justify-content:space-between;gap:8px;align-items:baseline}
+  .rcard .rname{font-weight:650;font-size:13.5px}
+  .rcard .rcamp{color:var(--muted);font-size:10.5px;white-space:nowrap}
+  .rcard .rco{color:var(--muted);font-size:11.5px;margin-top:1px}
+  .rcard .rquote{font-size:12px;color:var(--text);margin-top:8px;font-style:italic;opacity:.92}
+  .rcard .rnote{font-size:11px;color:var(--muted);margin-top:7px}
+  footer{margin-top:34px;color:var(--muted);font-size:11.5px;border-top:1px solid var(--line);padding-top:16px}
+  @media(max-width:880px){.kpis{grid-template-columns:repeat(2,1fr)}.charts{grid-template-columns:1fr}}
+  @media(max-width:760px){.rcards{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div>
+      <h1>Dripify Outreach Dashboard</h1>
+      <div class="sub">Human Digital &middot; Ben Van Rooy + Nora Ebaid</div>
+    </div>
+    <div class="meta">
+      Data snapshot: <b>4 Jul 2026</b> (both accounts)<br>
+      Source: Dripify Campaigns + Inbox (manual snapshot)
+    </div>
+  </header>
+
+  <div class="filters">
+    <div class="fgroup"><span class="flabel">Account</span><div class="seg" id="segAcct"></div></div>
+    <div class="fgroup"><span class="flabel">Audience</span><div class="seg" id="segAud"></div></div>
+    <div class="fgroup"><span class="flabel">Region</span><div class="seg" id="segReg"></div></div>
+    <button class="reset" id="resetBtn">Reset</button>
+  </div>
+  <div class="scope-note" id="scopeNote"></div>
+
+  <div class="grid kpis" id="kpis"></div>
+
+  <section>
+    <div class="grid charts">
+      <div class="chart-card"><h3>Acceptance rate by campaign</h3><div class="bars" id="acceptBars"></div></div>
+      <div class="chart-card"><h3>Reply rate by campaign</h3><div class="bars" id="replyBars"></div></div>
+    </div>
+    <div class="scope-note">Rates are Dripify's reported per-campaign values (denominator = LinkedIn invites sent, not total leads).</div>
+  </section>
+
+  <section>
+    <h2>Campaign detail</h2>
+    <table>
+      <thead><tr>
+        <th>Campaign</th><th>Acct</th><th>Audience</th><th>Region</th><th class="num">Leads</th>
+        <th class="num">Accepted</th><th class="num">Accept&nbsp;%</th><th class="num">Replies</th><th class="num">Reply&nbsp;%</th><th class="num">Launched</th>
+      </tr></thead>
+      <tbody id="tblBody"></tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Reply classification &amp; conversions</h2>
+    <div class="insight" id="insight"></div>
+    <div class="chart-card">
+      <h3>Replies by outcome</h3>
+      <div class="bars" id="catBars"></div>
+    </div>
+    <div class="clist" id="clist"></div>
+  </section>
+
+  <footer>
+    <b>Methodology.</b> Manual snapshot taken 4 Jul 2026 from the Dripify Campaigns view and Inbox (Ben's account, and Nora's via team sign-in).
+    Acceptance % and Reply % are Dripify's reported per-campaign rates (denominator = LinkedIn invites sent).
+    Aggregate rates in the KPI cards are derived (invites&nbsp;sent &asymp; accepted &divide; acceptance&nbsp;%) and are approximate because Dripify rounds its percentages.
+    All 20 replies across both accounts have been read and classified. Nora's two campaigns are both EOFY (AU). Dripify has no public API — re-run to refresh.
+  </footer>
+</div>
+
+<script>
+// ---------- DATA (snapshot 4 Jul 2026) ----------
+// account: Ben | Nora ; aud: Founder | Marketing | EOFY ; region: AU | NZ
+const campaigns = [
+  {account:"Ben", name:"ManufacturingAUEOFY", aud:"EOFY",      region:"AU", leads:248, accepted:3,  acc:16.7, replies:1, rep:5.6, launched:"25 Jun"},
+  {account:"Ben", name:"Mktg — Short MD",     aud:"Marketing", region:"NZ", leads:86,  accepted:6,  acc:8.1,  replies:1, rep:1.4, launched:"3 Jun"},
+  {account:"Ben", name:"Mktg — Persona",      aud:"Marketing", region:"NZ", leads:84,  accepted:15, acc:20.5, replies:2, rep:2.7, launched:"3 Jun"},
+  {account:"Ben", name:"Mktg — Bare Min",     aud:"Marketing", region:"NZ", leads:86,  accepted:24, acc:32.4, replies:4, rep:5.4, launched:"3 Jun"},
+  {account:"Ben", name:"Mktg — Short MD",     aud:"Marketing", region:"AU", leads:65,  accepted:5,  acc:7.9,  replies:0, rep:0.0, launched:"3 Jun"},
+  {account:"Ben", name:"Mktg — Persona",      aud:"Marketing", region:"AU", leads:63,  accepted:6,  acc:9.5,  replies:0, rep:0.0, launched:"3 Jun"},
+  {account:"Ben", name:"Mktg — Bare Min",     aud:"Marketing", region:"AU", leads:63,  accepted:10, acc:16.1, replies:1, rep:1.6, launched:"3 Jun"},
+  {account:"Ben", name:"Founder — Short MD",  aud:"Founder",   region:"NZ", leads:97,  accepted:7,  acc:8.9,  replies:0, rep:0.0, launched:"2 Jun"},
+  {account:"Ben", name:"Founder — Persona",   aud:"Founder",   region:"NZ", leads:97,  accepted:5,  acc:6.3,  replies:0, rep:0.0, launched:"2 Jun"},
+  {account:"Ben", name:"Founder — Bare Min",  aud:"Founder",   region:"NZ", leads:95,  accepted:8,  acc:10.1, replies:1, rep:1.3, launched:"2 Jun"},
+  {account:"Ben", name:"Founder — Short MD",  aud:"Founder",   region:"AU", leads:135, accepted:15, acc:19.0, replies:5, rep:6.3, launched:"2 Jun"},
+  {account:"Ben", name:"Founder — Persona",   aud:"Founder",   region:"AU", leads:134, accepted:15, acc:19.0, replies:1, rep:1.3, launched:"2 Jun"},
+  {account:"Ben", name:"Founder — Bare Min",  aud:"Founder",   region:"AU", leads:133, accepted:15, acc:19.0, replies:1, rep:1.3, launched:"2 Jun"},
+  {account:"Nora", name:"AUEOFY Marketeers",  aud:"EOFY", region:"AU", leads:64, accepted:4, acc:8.0,  replies:2, rep:4.0, launched:"26 Jun"},
+  {account:"Nora", name:"AUEOFY Founders",    aud:"EOFY", region:"AU", leads:71, accepted:5, acc:11.9, replies:1, rep:2.4, launched:"26 Jun"},
+];
+campaigns.forEach(c=> c.sent = c.acc>0 ? Math.round(c.accepted/(c.acc/100)) : 0);
+
+const cats = [
+  {key:"Converted",          label:"Converted – demo booked",    color:"#00b894"},
+  {key:"Interested",         label:"Interested",                 color:"#26d0a6"},
+  {key:"Engaged",            label:"Engaged – no decision",      color:"#74b9ff"},
+  {key:"Soft positive",      label:"Soft positive (low signal)", color:"#6c5ce7"},
+  {key:"Referral",           label:"Referral / redirect",        color:"#e056fd"},
+  {key:"Not now / timing",   label:"Not now / timing",           color:"#ffd166"},
+  {key:"Not a fit / nurture",label:"Not a fit / nurture",        color:"#e17055"},
+];
+
+const replies = [
+  // Ben
+  {account:"Ben", name:"Ashley Challenor", company:"Heat Trap Solutions", aud:"Founder", region:"AU", campaign:"AU Founder – Persona", cat:"Converted",
+   quote:"Will shoot you an email so we can set up some time to chat :)", note:"Demo booked."},
+  {account:"Ben", name:"David Baggs", company:"Global GreenTag Int'l", aud:"Founder", region:"AU", campaign:"AU Founder – Short MD", cat:"Interested",
+   quote:"Do you see any synergies worth exploring? Seems like there might be…", note:"Partnership/synergy angle; booking link sent."},
+  {account:"Ben", name:"Susannah Powell", company:"The Superpower Institute", aud:"Founder", region:"AU", campaign:"AU Founder – Bare Min", cat:"Interested",
+   quote:"I actually have a side project… which could be more relevant to discuss.", note:"Reached booking stage but didn't book despite 2 follow-ups."},
+  {account:"Ben", name:"Jake Clarke", company:"Longveld", aud:"Marketing", region:"NZ", campaign:"NZ Mktg – Persona", cat:"Interested",
+   quote:"We're definitely in that category, so I'd be happy to have a chat about how Human Digital might be able to help us in the future!", note:"Marketing Manager, Hamilton; booking link sent."},
+  {account:"Ben", name:"Carl Penk", company:"THERMOGARD", aud:"Marketing", region:"NZ", campaign:"NZ Mktg – Bare Min", cat:"Engaged",
+   quote:"Always happy for a chat. What're you thinking?", note:"Open + asked, but stalled after pitch."},
+  {account:"Ben", name:"Uma Tatikonda", company:"Fabrication & Pipe Services", aud:"Founder", region:"NZ", campaign:"NZ Founder – Bare Min", cat:"Engaged",
+   quote:"We are a service based industry, mostly dairy and process works.", note:"Live thread — last message awaiting reply."},
+  {account:"Ben", name:"Hannah Hurley", company:"Allure Digital", aud:"Marketing", region:"NZ", campaign:"NZ Mktg – Short MD", cat:"Soft positive",
+   quote:"Hi Ben! Nice to meet you 😊", note:"Friendly acknowledgement, no buying signal yet."},
+  {account:"Ben", name:"Phelia Tan", company:"Panasonic New Zealand", aud:"Marketing", region:"NZ", campaign:"NZ Mktg – Bare Min", cat:"Soft positive",
+   quote:"Hi Ben thanks for reaching out and connecting!", note:"Ecommerce Marketing Manager; follow-up unanswered."},
+  {account:"Ben", name:"Jackson Allan", company:"PassMark Software", aud:"Founder", region:"AU", campaign:"AU Founder – Short MD", cat:"Soft positive",
+   quote:"Cool", note:"Low-signal; follow-up unanswered."},
+  {account:"Ben", name:"Ron Blankenforth", company:"Aus Farming Infrastructure Grp", aud:"Founder", region:"AU", campaign:"AU Founder – Short MD", cat:"Soft positive",
+   quote:"Interesting", note:"Low-signal; follow-up unanswered."},
+  {account:"Ben", name:"Russell Pendlebury", company:"Energy Networks Australia", aud:"Founder", region:"AU", campaign:"AU Founder – Short MD", cat:"Soft positive",
+   quote:"👍 (reacted)", note:"GM Regulation & Policy; thumbs-up reaction, follow-up unanswered."},
+  {account:"Ben", name:"Heidi Ammouri", company:"Idieh Inc", aud:"EOFY", region:"AU", campaign:"ManufacturingAUEOFY", cat:"Soft positive",
+   quote:"I'm happy to connect. Thank you!", note:"Founder, Event & Marketing Services; friendly acknowledgement."},
+  {account:"Ben", name:"Milo Fowler", company:"Westcool WA", aud:"Founder", region:"AU", campaign:"AU Founder – Short MD", cat:"Referral",
+   quote:"This is not my area of the business but please reach out to my business partner James… he deals with this side.", note:"Managing Director; redirected to partner James."},
+  {account:"Ben", name:"Chanel Porter-Reidy", company:"RRE Agency", aud:"Marketing", region:"NZ", campaign:"NZ Mktg – Persona", cat:"Referral",
+   quote:"This is more something for my boss to look at… her email is rosalind@rrea.co.nz.", note:"Real-estate agency; redirected to boss Rosalind (email captured)."},
+  {account:"Ben", name:"Josh Dalziel", company:"Elevado", aud:"Marketing", region:"AU", campaign:"AU Mktg – Bare Min", cat:"Not now / timing",
+   quote:"Will look to push the marketing in a few months once [supply] is up and running.", note:"Warm future lead (~a few months out)."},
+  {account:"Ben", name:"Morné Cruywagen", company:"Value Tyres (ex)", aud:"Marketing", region:"NZ", campaign:"NZ Mktg – Bare Min", cat:"Not a fit / nurture",
+   quote:"Sorry have not been working there for the last 18 months. Currently in the fmcg market.", note:"No longer at the target company (data mismatch)."},
+  {account:"Ben", name:"Sian Wilson", company:"Deane Apparel NZ", aud:"Marketing", region:"NZ", campaign:"NZ Mktg – Bare Min", cat:"Not a fit / nurture",
+   quote:"Happy with our existing agency partnership… perhaps next year if things shift.", note:"Soft no, but accepted FY guide and shared an email."},
+  // Nora (both campaigns are EOFY AU)
+  {account:"Nora", name:"Mark Griffith", company:"Drivetrain", aud:"EOFY", region:"AU", campaign:"AUEOFY Founders", cat:"Interested",
+   quote:"We are still interested in some overseas markets, especially NZ… we just haven't had the time and horsepower to really look deeply into the planning.", note:"GM, Drivetrain — actively expanding (Power Gen, Ag/Construction, OEM service). Booking link sent. Highest-intent lead in Nora's account."},
+  {account:"Nora", name:"Adele Zhang", company:"Jungheinrich Australia", aud:"EOFY", region:"AU", campaign:"AUEOFY Marketeers", cat:"Engaged",
+   quote:"No, I have a team member.", note:"Answered discovery question; live thread awaiting reply."},
+  {account:"Nora", name:"Merwyn M", company:"RUD Australia", aud:"EOFY", region:"AU", campaign:"AUEOFY Marketeers", cat:"Not a fit / nurture",
+   quote:"Happy to connect and you can always use my network. But not looking for support.", note:"Polite decline; connection kept for future."},
+];
+
+// ---------- STATE + FILTER UI ----------
+const state = {account:"All", aud:"All", region:"All"};
+const acctOpts = ["All","Ben","Nora"];
+const audOpts  = ["All","Founder","Marketing","EOFY"];
+const regOpts  = ["All","AU","NZ"];
+
+function buildSeg(elId, opts, key, cls){
+  const el=document.getElementById(elId); el.innerHTML="";
+  opts.forEach(o=>{
+    const b=document.createElement("button");
+    b.textContent=o; if(cls) b.classList.add(cls);
+    if(state[key]===o) b.classList.add("on");
+    b.onclick=()=>{ state[key]=o; render(); };
+    el.appendChild(b);
+  });
+}
+document.getElementById("resetBtn").onclick=()=>{ state.account="All"; state.aud="All"; state.region="All"; render(); };
+
+const fmt1=n=>(Math.round(n*10)/10).toFixed(1);
+function matchC(c){ return (state.account==="All"||c.account===state.account) && (state.aud==="All"||c.aud===state.aud) && (state.region==="All"||c.region===state.region); }
+function matchR(r){ return (state.account==="All"||r.account===state.account) && (state.aud==="All"||r.aud===state.aud) && (state.region==="All"||r.region===state.region); }
+
+function barRow(parent,label,val,suffix,color,max,cls){
+  const row=document.createElement("div"); row.className="bar-row"+(cls?" "+cls:"");
+  row.innerHTML=`<div class="bname" title="${label}">${label}</div>
+    <div class="bar-track"><div class="bar-fill" style="width:${(val/max*100)||0}%;background:${color}"></div></div>
+    <div class="bval">${suffix==="%"?fmt1(val)+"%":val}</div>`;
+  parent.appendChild(row);
+}
+function prettyLabel(c){
+  let variant;
+  if(c.name.includes("— ")) variant=c.name.split("— ")[1];
+  else if(c.name.indexOf("AUEOFY ")===0) variant=c.name.slice(7);
+  else variant=c.name;
+  let parts=[];
+  if(state.account==="All") parts.push(c.account==="Ben"?"B":"N");
+  if(state.region==="All") parts.push(c.region);
+  if(state.aud==="All" && c.aud!=="EOFY") parts.push(c.aud==="Founder"?"Fnd":"Mktg");
+  parts.push(variant);
+  return parts.join(" ");
+}
+
+function render(){
+  buildSeg("segAcct",acctOpts,"account","acct");
+  buildSeg("segAud",audOpts,"aud");
+  buildSeg("segReg",regOpts,"region","reg");
+
+  const cs = campaigns.filter(matchC);
+  const rs = replies.filter(matchR);
+
+  const scope = [state.account==="All"?"All accounts":state.account,
+                 state.aud==="All"?"all audiences":state.aud,
+                 state.region==="All"?"all regions":state.region].join(" · ");
+  document.getElementById("scopeNote").innerHTML = `Showing <b>${cs.length}</b> campaign${cs.length!==1?"s":""} &mdash; <b>${scope}</b>`;
+
+  const leads=cs.reduce((a,c)=>a+c.leads,0);
+  const accepted=cs.reduce((a,c)=>a+c.accepted,0);
+  const sent=cs.reduce((a,c)=>a+c.sent,0);
+  const reps=cs.reduce((a,c)=>a+c.replies,0);
+  const accPct=sent? accepted/sent*100 : 0;
+  const repPct=sent? reps/sent*100 : 0;
+  const converted=rs.filter(r=>r.cat==="Converted").length;
+  const interested=rs.filter(r=>r.cat==="Interested").length;
+
+  document.getElementById("kpis").innerHTML = `
+    <div class="card kpi"><div class="label">Campaigns</div><div class="val">${cs.length}</div><div class="note">${leads.toLocaleString()} leads</div></div>
+    <div class="card kpi"><div class="label">Acceptance rate</div><div class="val accent">${sent?"≈"+fmt1(accPct)+"%":"—"}</div><div class="note">${accepted} accepted${sent?" of ≈"+sent+" sent":""}</div></div>
+    <div class="card kpi"><div class="label">Reply rate</div><div class="val green">${sent?"≈"+fmt1(repPct)+"%":"—"}</div><div class="note">${reps} repl${reps===1?"y":"ies"}</div></div>
+    <div class="card kpi"><div class="label">Converted</div><div class="val">${converted}</div><div class="note">${interested} interested</div></div>`;
+
+  const ab=document.getElementById("acceptBars"); ab.innerHTML="";
+  const rb=document.getElementById("replyBars"); rb.innerHTML="";
+  if(!cs.length){ ab.innerHTML='<div class="empty">No campaigns match this filter.</div>'; rb.innerHTML='<div class="empty">No campaigns match this filter.</div>'; }
+  else{
+    const maxA=Math.max(...cs.map(c=>c.acc),1), maxR=Math.max(...cs.map(c=>c.rep),1);
+    cs.forEach(c=> barRow(ab, prettyLabel(c), c.acc, "%", "#6c5ce7", maxA));
+    cs.forEach(c=> barRow(rb, prettyLabel(c), c.rep, "%", "#00b894", maxR));
+  }
+
+  const tb=document.getElementById("tblBody"); tb.innerHTML="";
+  if(!cs.length){ tb.innerHTML='<tr><td colspan="10" class="empty">No campaigns match this filter.</td></tr>'; }
+  cs.forEach(c=>{
+    const tr=document.createElement("tr");
+    tr.innerHTML=`<td>${c.name}</td>
+      <td><span class="pill acct-${c.account}">${c.account}</span></td>
+      <td><span class="pill aud-${c.aud}">${c.aud}</span></td>
+      <td><span class="pill reg-${c.region}">${c.region}</span></td>
+      <td class="num">${c.leads}</td><td class="num">${c.accepted}</td><td class="num">${fmt1(c.acc)}%</td>
+      <td class="num">${c.replies}</td><td class="num">${fmt1(c.rep)}%</td><td class="num">${c.launched}</td>`;
+    tb.appendChild(tr);
+  });
+
+  const ins=document.getElementById("insight");
+  if(!rs.length){ ins.innerHTML="No replies recorded for this segment."; }
+  else{
+    const hot=rs.filter(r=>r.cat==="Converted"||r.cat==="Interested").map(r=>r.name);
+    ins.innerHTML = `<b>${rs.length}</b> repl${rs.length===1?"y":"ies"} in this segment: <b>${converted}</b> booked, <b>${interested}</b> interested. `
+      + (hot.length?`Highest-intent: ${hot.join(", ")}.`:`No booked/interested replies in this cut.`);
+  }
+
+  const cb=document.getElementById("catBars"); cb.innerHTML="";
+  const counts={}; cats.forEach(c=>counts[c.key]=rs.filter(r=>r.cat===c.key).length);
+  const maxC=Math.max(...Object.values(counts),1);
+  if(!rs.length){ cb.innerHTML='<div class="empty">No replies in this segment.</div>'; }
+  else cats.forEach(c=> barRow(cb,c.label,counts[c.key],"n",c.color,maxC,"cat"));
+
+  const cl=document.getElementById("clist"); cl.innerHTML="";
+  cats.forEach(c=>{
+    const items=rs.filter(r=>r.cat===c.key); if(!items.length) return;
+    const g=document.createElement("div"); g.className="cat-group";
+    g.innerHTML=`<h4><span class="dot" style="background:${c.color}"></span>${c.label} <span class="cat-count">· ${items.length}</span></h4>`;
+    const cards=document.createElement("div"); cards.className="rcards";
+    items.forEach(r=>{
+      const card=document.createElement("div");
+      card.className="rcard"+(c.key==="Converted"?" win":"");
+      card.innerHTML=`<div class="rh"><span class="rname">${r.name}</span><span class="rcamp">${r.account} · ${r.campaign}</span></div>
+        <div class="rco">${r.company}</div>
+        ${r.quote?`<div class="rquote">“${r.quote}”</div>`:``}
+        <div class="rnote">${r.note}</div>`;
+      cards.appendChild(card);
+    });
+    g.appendChild(cards); cl.appendChild(g);
+  });
+}
+render();
+</script>
+</body>
+</html>
