@@ -81,6 +81,17 @@
   .rcard .rquote{font-size:12px;color:var(--text);margin-top:8px;font-style:italic;opacity:.92}
   .rcard .rnote{font-size:11px;color:var(--muted);margin-top:7px}
   footer{margin-top:34px;color:var(--muted);font-size:11.5px;border-top:1px solid var(--line);padding-top:16px}
+  .matrix td.v{font-weight:700;color:var(--text)}
+  .matrix .hot{color:#00b894;font-weight:700}
+  .matrix .warm{color:#26d0a6;font-weight:600}
+  .matrix .z{color:#39404f}
+  .matrix tr.totrow td{border-top:2px solid var(--line);font-weight:700;color:var(--text)}
+  .legend{font-size:11px;color:var(--muted);margin-top:8px}
+  h2.sec{cursor:pointer;user-select:none;display:flex;align-items:center;gap:9px}
+  h2.sec::before{content:"\25BE";font-size:12px;color:var(--muted);transition:transform .15s;display:inline-block}
+  section.collapsed h2.sec::before{transform:rotate(-90deg)}
+  section.collapsed .sec-body{display:none}
+  h2.sec .hint{font-size:11px;font-weight:500;color:var(--muted);text-transform:none;letter-spacing:0}
   @media(max-width:880px){.kpis{grid-template-columns:repeat(2,1fr)}.charts{grid-template-columns:1fr}}
   @media(max-width:760px){.rcards{grid-template-columns:1fr}}
 </style>
@@ -109,15 +120,19 @@
   <div class="grid kpis" id="kpis"></div>
 
   <section>
+    <h2 class="sec">Rates by campaign</h2>
+    <div class="sec-body">
     <div class="grid charts">
       <div class="chart-card"><h3>Acceptance rate by campaign</h3><div class="bars" id="acceptBars"></div></div>
       <div class="chart-card"><h3>Reply rate by campaign</h3><div class="bars" id="replyBars"></div></div>
     </div>
     <div class="scope-note">Rates are Dripify's reported per-campaign values (denominator = LinkedIn invites sent, not total leads).</div>
+    </div>
   </section>
 
   <section>
-    <h2>Campaign detail</h2>
+    <h2 class="sec">Campaign detail</h2>
+    <div class="sec-body">
     <table>
       <thead><tr>
         <th>Campaign</th><th>Acct</th><th>Audience</th><th>Region</th><th class="num">Leads</th>
@@ -125,16 +140,28 @@
       </tr></thead>
       <tbody id="tblBody"></tbody>
     </table>
+    </div>
   </section>
 
   <section>
-    <h2>Reply classification &amp; conversions</h2>
+    <h2 class="sec">Which messaging type is working</h2>
+    <div class="sec-body">
+    <div class="scope-note" style="margin-bottom:12px">Outcomes by connection-request opener. Counts respect the filters above — set Region and Audience to compare openers within a segment (e.g. AU Founders).</div>
+    <div class="matrix" id="matrixWrap"></div>
+    <div class="legend">Reply rate = replies &divide; invites sent. Positive&nbsp;% = share of replies that are converted or interested (quality, not volume). A high reply rate with a low positive % means the opener pulls replies that waste time. Green = converted &middot; teal = interested &middot; "·" = none.</div>
+    </div>
+  </section>
+
+  <section class="collapsed">
+    <h2 class="sec">Reply classification &amp; conversions <span class="hint">(click to expand)</span></h2>
+    <div class="sec-body">
     <div class="insight" id="insight"></div>
     <div class="chart-card">
       <h3>Replies by outcome</h3>
       <div class="bars" id="catBars"></div>
     </div>
     <div class="clist" id="clist"></div>
+    </div>
   </section>
 
   <footer>
@@ -176,6 +203,9 @@ const cats = [
   {key:"Not now / timing",   label:"Not now / timing",           color:"#ffd166"},
   {key:"Not a fit / nurture",label:"Not a fit / nurture",        color:"#e17055"},
 ];
+const catShort={"Converted":"Conv","Interested":"Interest","Engaged":"Engaged","Soft positive":"Soft","Referral":"Referral","Not now / timing":"Timing","Not a fit / nurture":"No fit"};
+const variantOrder=["Persona","Bare Min","Short MD","EOFY"];
+function variantOf(s){ if(/Bare Min/i.test(s)) return "Bare Min"; if(/Persona/i.test(s)) return "Persona"; if(/Short MD/i.test(s)) return "Short MD"; return "EOFY"; }
 
 const replies = [
   // ===== Ben =====
@@ -330,6 +360,36 @@ function render(){
     tb.appendChild(tr);
   });
 
+  // ----- messaging-type matrix -----
+  const mw=document.getElementById("matrixWrap");
+  if(mw){
+    if(!rs.length){ mw.innerHTML='<div class="empty">No replies match this filter.</div>'; }
+    else{
+      const present=variantOrder.filter(v=>rs.some(r=>variantOf(r.campaign)===v));
+      const sentForV=(v)=>cs.filter(c=>variantOf(c.name)===v).reduce((a,c)=>a+c.sent,0);
+      let h='<table><thead><tr><th>Messaging type</th><th class="num">Replies</th><th class="num">Reply&nbsp;rate</th><th class="num">Positive&nbsp;%</th>';
+      cats.forEach(c=> h+=`<th class="num">${catShort[c.key]}</th>`);
+      h+='</tr></thead><tbody>';
+      present.forEach(v=>{
+        const vr=rs.filter(r=>variantOf(r.campaign)===v);
+        const pos=vr.filter(r=>r.cat==="Converted"||r.cat==="Interested").length;
+        const posPct=vr.length?Math.round(pos/vr.length*100):0;
+        const posCls=posPct>=30?'hot':(posPct>0?'warm':'z');
+        const snt=sentForV(v);
+        const rr=snt?fmt1(vr.length/snt*100)+"%":"—";
+        h+=`<tr><td class="v">${v}</td><td class="num">${vr.length}</td><td class="num" style="color:var(--muted)">${rr}</td><td class="num ${posCls}">${vr.length?posPct+'%':'·'}</td>`;
+        cats.forEach(c=>{ const n=vr.filter(r=>r.cat===c.key).length; const cls=n===0?'z':c.key==="Converted"?'hot':c.key==="Interested"?'warm':''; h+=`<td class="num ${cls}">${n||'·'}</td>`; });
+        h+='</tr>';
+      });
+      const posAll=rs.filter(r=>r.cat==="Converted"||r.cat==="Interested").length;
+      const posAllPct=rs.length?Math.round(posAll/rs.length*100):0;
+      h+=`<tr class="totrow"><td>All types</td><td class="num">${rs.length}</td><td class="num"></td><td class="num">${posAllPct}%</td>`;
+      cats.forEach(c=>{ const n=rs.filter(r=>r.cat===c.key).length; h+=`<td class="num">${n||'·'}</td>`; });
+      h+='</tr></tbody></table>';
+      mw.innerHTML=h;
+    }
+  }
+
   const ins=document.getElementById("insight");
   if(!rs.length){ ins.innerHTML="No replies recorded for this segment."; }
   else{
@@ -363,6 +423,7 @@ function render(){
   });
 }
 render();
+document.querySelectorAll('h2.sec').forEach(h=>h.addEventListener('click',()=>h.closest('section').classList.toggle('collapsed')));
 </script>
 </body>
 </html>
