@@ -93,7 +93,7 @@
       <div class="sub">Human Digital &middot; Ben Van Rooy + Nora Ebaid</div>
     </div>
     <div class="meta">
-      Data snapshot: <b>4 Jul 2026</b> (both accounts)<br>
+      Data snapshot: <b>8 Jul 2026</b> (reconciled from full thread export)<br>
       Source: Dripify Campaigns + Inbox (manual snapshot)
     </div>
   </header>
@@ -138,21 +138,21 @@
   </section>
 
   <footer>
-    <b>Methodology.</b> Manual snapshot taken 4 Jul 2026 from the Dripify Campaigns view and Inbox (Ben's account, and Nora's via team sign-in).
+    <b>Methodology.</b> Reconciled 8 Jul 2026 against the full Dripify thread export for both accounts (Ben, and Nora via team sign-in).
     Acceptance % and Reply % are Dripify's reported per-campaign rates (denominator = LinkedIn invites sent).
     Aggregate rates in the KPI cards are derived (invites&nbsp;sent &asymp; accepted &divide; acceptance&nbsp;%) and are approximate because Dripify rounds its percentages.
-    All 20 replies across both accounts have been read and classified. Nora's two campaigns are both EOFY (AU). Dripify has no public API — re-run to refresh.
+    28 replies across both accounts, all read and classified from the actual conversation threads. Nora's two campaigns are both EOFY (AU). Dripify has no public API — re-run to refresh.
   </footer>
 </div>
 
 <script>
-// ---------- DATA (snapshot 4 Jul 2026) ----------
+// ---------- DATA (reconciled 8 Jul 2026 from full thread export) ----------
 // account: Ben | Nora ; aud: Founder | Marketing | EOFY ; region: AU | NZ
 const campaigns = [
-  {account:"Ben", name:"ManufacturingAUEOFY", aud:"EOFY",      region:"AU", leads:248, accepted:3,  acc:16.7, replies:1, rep:5.6, launched:"25 Jun"},
+  {account:"Ben", name:"ManufacturingAUEOFY", aud:"EOFY",      region:"AU", leads:268, accepted:5,  acc:12.5, replies:2, rep:5.0, launched:"25 Jun"},
   {account:"Ben", name:"Mktg — Short MD",     aud:"Marketing", region:"NZ", leads:86,  accepted:6,  acc:8.1,  replies:1, rep:1.4, launched:"3 Jun"},
-  {account:"Ben", name:"Mktg — Persona",      aud:"Marketing", region:"NZ", leads:84,  accepted:15, acc:20.5, replies:2, rep:2.7, launched:"3 Jun"},
-  {account:"Ben", name:"Mktg — Bare Min",     aud:"Marketing", region:"NZ", leads:86,  accepted:24, acc:32.4, replies:4, rep:5.4, launched:"3 Jun"},
+  {account:"Ben", name:"Mktg — Persona",      aud:"Marketing", region:"NZ", leads:84,  accepted:15, acc:20.5, replies:3, rep:4.1, launched:"3 Jun"},
+  {account:"Ben", name:"Mktg — Bare Min",     aud:"Marketing", region:"NZ", leads:86,  accepted:24, acc:32.4, replies:5, rep:6.8, launched:"3 Jun"},
   {account:"Ben", name:"Mktg — Short MD",     aud:"Marketing", region:"AU", leads:65,  accepted:5,  acc:7.9,  replies:0, rep:0.0, launched:"3 Jun"},
   {account:"Ben", name:"Mktg — Persona",      aud:"Marketing", region:"AU", leads:63,  accepted:6,  acc:9.5,  replies:0, rep:0.0, launched:"3 Jun"},
   {account:"Ben", name:"Mktg — Bare Min",     aud:"Marketing", region:"AU", leads:63,  accepted:10, acc:16.1, replies:1, rep:1.6, launched:"3 Jun"},
@@ -160,10 +160,10 @@ const campaigns = [
   {account:"Ben", name:"Founder — Persona",   aud:"Founder",   region:"NZ", leads:97,  accepted:5,  acc:6.3,  replies:0, rep:0.0, launched:"2 Jun"},
   {account:"Ben", name:"Founder — Bare Min",  aud:"Founder",   region:"NZ", leads:95,  accepted:8,  acc:10.1, replies:1, rep:1.3, launched:"2 Jun"},
   {account:"Ben", name:"Founder — Short MD",  aud:"Founder",   region:"AU", leads:135, accepted:15, acc:19.0, replies:5, rep:6.3, launched:"2 Jun"},
-  {account:"Ben", name:"Founder — Persona",   aud:"Founder",   region:"AU", leads:134, accepted:15, acc:19.0, replies:1, rep:1.3, launched:"2 Jun"},
+  {account:"Ben", name:"Founder — Persona",   aud:"Founder",   region:"AU", leads:134, accepted:15, acc:19.0, replies:2, rep:2.5, launched:"2 Jun"},
   {account:"Ben", name:"Founder — Bare Min",  aud:"Founder",   region:"AU", leads:133, accepted:15, acc:19.0, replies:1, rep:1.3, launched:"2 Jun"},
-  {account:"Nora", name:"AUEOFY Marketeers",  aud:"EOFY", region:"AU", leads:64, accepted:4, acc:8.0,  replies:2, rep:4.0, launched:"26 Jun"},
-  {account:"Nora", name:"AUEOFY Founders",    aud:"EOFY", region:"AU", leads:71, accepted:5, acc:11.9, replies:1, rep:2.4, launched:"26 Jun"},
+  {account:"Nora", name:"AUEOFY Marketeers",  aud:"EOFY", region:"AU", leads:64, accepted:6,  acc:9.4,  replies:3, rep:4.7, launched:"26 Jun"},
+  {account:"Nora", name:"AUEOFY Founders",    aud:"EOFY", region:"AU", leads:93, accepted:11, acc:11.8, replies:4, rep:4.3, launched:"26 Jun"},
 ];
 campaigns.forEach(c=> c.sent = c.acc>0 ? Math.round(c.accepted/(c.acc/100)) : 0);
 
@@ -178,48 +178,64 @@ const cats = [
 ];
 
 const replies = [
-  // Ben
-  {account:"Ben", name:"Ashley Challenor", company:"Heat Trap Solutions", aud:"Founder", region:"AU", campaign:"AU Founder – Persona", cat:"Converted",
-   quote:"Will shoot you an email so we can set up some time to chat :)", note:"Demo booked."},
+  // ===== Ben =====
+  {account:"Ben", name:"Ashley Challenor", company:"Heat Trap Solutions", aud:"Founder", region:"AU", campaign:"AU Founder – Bare Min", cat:"Converted",
+   quote:"…so far we are servicing only 3% of the safety showers in Australia.", note:"Chiller manufacturer, 97% of market still open. Demo booked."},
+  {account:"Ben", name:"Jake Clarke", company:"Longveld", aud:"Marketing", region:"NZ", campaign:"NZ Mktg – Persona", cat:"Converted",
+   quote:"Yeah, any of these work for you? 15th… 21st… 22nd", note:"Marketing Manager, Hamilton. Demo being locked for 21 Jul 10am. Converted from interested."},
   {account:"Ben", name:"David Baggs", company:"Global GreenTag Int'l", aud:"Founder", region:"AU", campaign:"AU Founder – Short MD", cat:"Interested",
-   quote:"Do you see any synergies worth exploring? Seems like there might be…", note:"Partnership/synergy angle; booking link sent."},
-  {account:"Ben", name:"Susannah Powell", company:"The Superpower Institute", aud:"Founder", region:"AU", campaign:"AU Founder – Bare Min", cat:"Interested",
-   quote:"I actually have a side project… which could be more relevant to discuss.", note:"Reached booking stage but didn't book despite 2 follow-ups."},
-  {account:"Ben", name:"Jake Clarke", company:"Longveld", aud:"Marketing", region:"NZ", campaign:"NZ Mktg – Persona", cat:"Interested",
-   quote:"We're definitely in that category, so I'd be happy to have a chat about how Human Digital might be able to help us in the future!", note:"Marketing Manager, Hamilton; booking link sent."},
+   quote:"Do you see any synergies worth exploring? Seems like there might be…", note:"Certification synergy angle; booking link + follow-up sent, awaiting reply."},
+  {account:"Ben", name:"Susannah Powell", company:"The Superpower Institute", aud:"Founder", region:"AU", campaign:"AU Founder – Persona", cat:"Interested",
+   quote:"I actually have a side project… load management indicators for cranes… which could be more relevant to discuss", note:"Got the calendar link; didn't book after 2 follow-ups."},
   {account:"Ben", name:"Carl Penk", company:"THERMOGARD", aud:"Marketing", region:"NZ", campaign:"NZ Mktg – Bare Min", cat:"Engaged",
-   quote:"Always happy for a chat. What're you thinking?", note:"Open + asked, but stalled after pitch."},
+   quote:"Always happy for a chat. What're you thinking?", note:"Open; Ben pitched (widening beyond seafood), awaiting reply."},
   {account:"Ben", name:"Uma Tatikonda", company:"Fabrication & Pipe Services", aud:"Founder", region:"NZ", campaign:"NZ Founder – Bare Min", cat:"Engaged",
-   quote:"We are a service based industry, mostly dairy and process works.", note:"Live thread — last message awaiting reply."},
+   quote:"We are a service based industry, mostly focusing on dairy and process works", note:"Live thread; Ben offered a positioning angle, awaiting reply."},
   {account:"Ben", name:"Hannah Hurley", company:"Allure Digital", aud:"Marketing", region:"NZ", campaign:"NZ Mktg – Short MD", cat:"Soft positive",
-   quote:"Hi Ben! Nice to meet you 😊", note:"Friendly acknowledgement, no buying signal yet."},
+   quote:"Hi Ben! Nice to meet you ☺️", note:"Friendly acknowledgement, no buying signal yet."},
   {account:"Ben", name:"Phelia Tan", company:"Panasonic New Zealand", aud:"Marketing", region:"NZ", campaign:"NZ Mktg – Bare Min", cat:"Soft positive",
-   quote:"Hi Ben thanks for reaching out and connecting!", note:"Ecommerce Marketing Manager; follow-up unanswered."},
+   quote:"Hi Ben thanks for reaching out and connecting!", note:"Ecommerce Marketing Manager; Ben's question awaiting reply."},
   {account:"Ben", name:"Jackson Allan", company:"PassMark Software", aud:"Founder", region:"AU", campaign:"AU Founder – Short MD", cat:"Soft positive",
-   quote:"Cool", note:"Low-signal; follow-up unanswered."},
+   quote:"Cool", note:"Low-signal; Ben's question awaiting reply."},
   {account:"Ben", name:"Ron Blankenforth", company:"Aus Farming Infrastructure Grp", aud:"Founder", region:"AU", campaign:"AU Founder – Short MD", cat:"Soft positive",
-   quote:"Interesting", note:"Low-signal; follow-up unanswered."},
+   quote:"Interesting", note:"Low-signal; Ben's question awaiting reply."},
   {account:"Ben", name:"Russell Pendlebury", company:"Energy Networks Australia", aud:"Founder", region:"AU", campaign:"AU Founder – Short MD", cat:"Soft positive",
-   quote:"👍 (reacted)", note:"GM Regulation & Policy; thumbs-up reaction, follow-up unanswered."},
+   quote:"👍", note:"GM Regulation & Policy; reaction only, Ben's question awaiting reply."},
   {account:"Ben", name:"Heidi Ammouri", company:"Idieh Inc", aud:"EOFY", region:"AU", campaign:"ManufacturingAUEOFY", cat:"Soft positive",
-   quote:"I'm happy to connect. Thank you!", note:"Founder, Event & Marketing Services; friendly acknowledgement."},
+   quote:"I'm happy to connect. Thank you!", note:"Founder, Event & Marketing Services; Ben's question awaiting reply."},
   {account:"Ben", name:"Milo Fowler", company:"Westcool WA", aud:"Founder", region:"AU", campaign:"AU Founder – Short MD", cat:"Referral",
-   quote:"This is not my area of the business but please reach out to my business partner James… he deals with this side.", note:"Managing Director; redirected to partner James."},
+   quote:"please reach out to my business partner James… he deals with this side of the business.", note:"MD; redirected to partner James (0439 359 789)."},
   {account:"Ben", name:"Chanel Porter-Reidy", company:"RRE Agency", aud:"Marketing", region:"NZ", campaign:"NZ Mktg – Persona", cat:"Referral",
-   quote:"This is more something for my boss to look at… her email is rosalind@rrea.co.nz.", note:"Real-estate agency; redirected to boss Rosalind (email captured)."},
+   quote:"This is more something for my boss to look at… her email is rosalind@rrea.co.nz", note:"Redirected to boss Rosalind; Ben emailing her."},
   {account:"Ben", name:"Josh Dalziel", company:"Elevado", aud:"Marketing", region:"AU", campaign:"AU Mktg – Bare Min", cat:"Not now / timing",
-   quote:"Will look to push the marketing in a few months once [supply] is up and running.", note:"Warm future lead (~a few months out)."},
+   quote:"Will look to push the marketing in a few months once [supply] is up and running.", note:"Warm future lead; Ben offered a GTM guide."},
+  {account:"Ben", name:"Shiela Mae Junsay", company:"NZAero", aud:"Marketing", region:"NZ", campaign:"NZ Mktg – Persona", cat:"Not now / timing",
+   quote:"not actively looking to bring in additional agency support, but happy to stay connected and keep Human Digital in mind if that changes", note:"Polite not-now, door open. Ben sent a strong nurture reply."},
+  {account:"Ben", name:"Cherryll Thompson", company:"Albany Toyota", aud:"Marketing", region:"NZ", campaign:"NZ Mktg – Bare Min", cat:"Not now / timing",
+   quote:"on holiday in the UK until the end of the month. I will review and get back to you once I am in the office", note:"Will review the offer when back end of month. Circle back."},
   {account:"Ben", name:"Morné Cruywagen", company:"Value Tyres (ex)", aud:"Marketing", region:"NZ", campaign:"NZ Mktg – Bare Min", cat:"Not a fit / nurture",
-   quote:"Sorry have not been working there for the last 18 months. Currently in the fmcg market.", note:"No longer at the target company (data mismatch)."},
+   quote:"Sorry have not been working there for the last 18 months. Currently in the fmcg market.", note:"Left the target company (data mismatch)."},
   {account:"Ben", name:"Sian Wilson", company:"Deane Apparel NZ", aud:"Marketing", region:"NZ", campaign:"NZ Mktg – Bare Min", cat:"Not a fit / nurture",
-   quote:"Happy with our existing agency partnership… perhaps next year if things shift.", note:"Soft no, but accepted FY guide and shared an email."},
-  // Nora (both campaigns are EOFY AU)
-  {account:"Nora", name:"Mark Griffith", company:"Drivetrain", aud:"EOFY", region:"AU", campaign:"AUEOFY Founders", cat:"Interested",
-   quote:"We are still interested in some overseas markets, especially NZ… we just haven't had the time and horsepower to really look deeply into the planning.", note:"GM, Drivetrain — actively expanding (Power Gen, Ag/Construction, OEM service). Booking link sent. Highest-intent lead in Nora's account."},
+   quote:"happy with our existing agency partnership… Perhaps next year if things shift.", note:"Soft no, but took the FY guide (sian.wilson@deane.co.nz)."},
+  {account:"Ben", name:"Sahul Maricar", company:"OEM Group", aud:"EOFY", region:"AU", campaign:"ManufacturingAUEOFY", cat:"Not a fit / nurture",
+   quote:"Will reach out if there's a requirement. Cheers.", note:"Polite brush-off; no active need."},
+  {account:"Ben", name:"Murray Clair", company:"Nupress Group", aud:"Founder", region:"AU", campaign:"AU Founder – Persona", cat:"Not a fit / nurture",
+   quote:"I keep my LinkedIn activity focused on maintaining my professional network and don't engage in… business development", note:"Declines BD/vendor conversations on LinkedIn."},
+  // ===== Nora (both campaigns EOFY AU) =====
+  {account:"Nora", name:"Mark Griffith", company:"Drivetrain", aud:"EOFY", region:"AU", campaign:"AUEOFY Founders", cat:"Converted",
+   quote:"we are focused on expanding into new markets… still interested in some overseas markets, especially NZ", note:"GM, Drivetrain. Booked 1pm 21 Jul (mark.griffith@drivetrainpower.com). Highest-intent lead in Nora's account."},
   {account:"Nora", name:"Adele Zhang", company:"Jungheinrich Australia", aud:"EOFY", region:"AU", campaign:"AUEOFY Marketeers", cat:"Engaged",
-   quote:"No, I have a team member.", note:"Answered discovery question; live thread awaiting reply."},
+   quote:"No, I have a team member.", note:"Head of Marketing Oceania; answered discovery question, Nora's follow-up awaiting reply."},
+  {account:"Nora", name:"Derryn Buchner", company:"TTi – Trans Tank International", aud:"EOFY", region:"AU", campaign:"AUEOFY Marketeers", cat:"Engaged",
+   quote:"we are a team of 5 in the marketing team… we do ultimately have our responsibilities!", note:"Marketing Coordinator; Nora's cross-Tasman question awaiting reply."},
+  {account:"Nora", name:"Reza Asfari", company:"KDT Australia", aud:"EOFY", region:"AU", campaign:"AUEOFY Founders", cat:"Soft positive",
+   quote:"Thanks for reaching out. Nice to connect. Looking forward to staying in touch.", note:"Field Services Engineer; Nora's discovery question awaiting reply."},
+  {account:"Nora", name:"Hamidreza Mozayeni", company:"Institute of Urban Design & Engineering (IUDE)", aud:"EOFY", region:"AU", campaign:"AUEOFY Founders", cat:"Soft positive",
+   quote:"Hi Nora, thanks for the connect.", note:"Dean; friendly acknowledgement, no discovery follow-up yet."},
+  {account:"Nora", name:"George Farah", company:"LMATS Pty Ltd", aud:"EOFY", region:"AU", campaign:"AUEOFY Founders", cat:"Not a fit / nurture",
+   quote:"We're not looking for external support on these topics at the moment but I appreciate the connection.", note:"MD; polite decline after the FY27 game-plan link."},
   {account:"Nora", name:"Merwyn M", company:"RUD Australia", aud:"EOFY", region:"AU", campaign:"AUEOFY Marketeers", cat:"Not a fit / nurture",
-   quote:"Happy to connect and you can always use my network. But not looking for support.", note:"Polite decline; connection kept for future."},
+   quote:"Happy to connect and you can always use my network. But not looking for support.", note:"Group Marketing Manager; polite decline."},
 ];
 
 // ---------- STATE + FILTER UI ----------
@@ -318,7 +334,7 @@ function render(){
   if(!rs.length){ ins.innerHTML="No replies recorded for this segment."; }
   else{
     const hot=rs.filter(r=>r.cat==="Converted"||r.cat==="Interested").map(r=>r.name);
-    ins.innerHTML = `<b>${rs.length}</b> repl${rs.length===1?"y":"ies"} in this segment: <b>${converted}</b> booked, <b>${interested}</b> interested. `
+    ins.innerHTML = `<b>${rs.length}</b> repl${rs.length===1?"y":"ies"} classified in this segment: <b>${converted}</b> booked, <b>${interested}</b> interested. `
       + (hot.length?`Highest-intent: ${hot.join(", ")}.`:`No booked/interested replies in this cut.`);
   }
 
