@@ -104,7 +104,7 @@
       <div class="sub">Human Digital &middot; Ben Van Rooy + Nora Ebaid</div>
     </div>
     <div class="meta">
-      Data snapshot: <b>8 Jul 2026</b> (reconciled from full thread export)<br>
+      Data snapshot: <b>13 Jul 2026</b> (reconciled from full thread exports)<br>
       Source: Dripify Campaigns + Inbox (manual snapshot)
     </div>
   </header>
@@ -116,6 +116,7 @@
     <button class="reset" id="resetBtn">Reset</button>
   </div>
   <div class="scope-note" id="scopeNote"></div>
+  <div id="staleNote"></div>
 
   <div class="grid kpis" id="kpis"></div>
 
@@ -165,10 +166,12 @@
   </section>
 
   <footer>
-    <b>Methodology.</b> Reconciled 8 Jul 2026 against the full Dripify thread export for both accounts (Ben, and Nora via team sign-in).
+    <b>Methodology.</b> Reconciled 13 Jul 2026 against the full Dripify thread exports for both accounts (Ben, and Nora via team sign-in).
     Acceptance % and Reply % are Dripify's reported per-campaign rates (denominator = LinkedIn invites sent).
     Aggregate rates in the KPI cards are derived (invites&nbsp;sent &asymp; accepted &divide; acceptance&nbsp;%) and are approximate because Dripify rounds its percentages.
-    28 replies across both accounts, all read and classified from the actual conversation threads. Nora's two campaigns are both EOFY (AU). Dripify has no public API — re-run to refresh.
+    43 replies across both accounts, all read and classified from the actual conversation threads. Two Ben EOFY declines are logged as counts only (names not recorded).
+    ManufacturingAUEOFY and AUEOFY Founders have grown since the last campaign-stats pull, so their send/acceptance figures are stale and their reply rates are suppressed until refreshed.
+    Nora's campaigns are both EOFY (AU). Dripify has no public API — re-run to refresh.
   </footer>
 </div>
 
@@ -176,7 +179,7 @@
 // ---------- DATA (reconciled 8 Jul 2026 from full thread export) ----------
 // account: Ben | Nora ; aud: Founder | Marketing | EOFY ; region: AU | NZ
 const campaigns = [
-  {account:"Ben", name:"ManufacturingAUEOFY", aud:"EOFY",      region:"AU", leads:268, accepted:5,  acc:12.5, replies:2, rep:5.0, launched:"25 Jun"},
+  {account:"Ben", name:"ManufacturingAUEOFY", aud:"EOFY",      region:"AU", leads:268, accepted:5,  acc:12.5, replies:4, rep:null, stale:true, launched:"25 Jun"},
   {account:"Ben", name:"Mktg — Short MD",     aud:"Marketing", region:"NZ", leads:86,  accepted:6,  acc:8.1,  replies:1, rep:1.4, launched:"3 Jun"},
   {account:"Ben", name:"Mktg — Persona",      aud:"Marketing", region:"NZ", leads:84,  accepted:15, acc:20.5, replies:3, rep:4.1, launched:"3 Jun"},
   {account:"Ben", name:"Mktg — Bare Min",     aud:"Marketing", region:"NZ", leads:86,  accepted:24, acc:32.4, replies:5, rep:6.8, launched:"3 Jun"},
@@ -190,7 +193,7 @@ const campaigns = [
   {account:"Ben", name:"Founder — Persona",   aud:"Founder",   region:"AU", leads:134, accepted:15, acc:19.0, replies:2, rep:2.5, launched:"2 Jun"},
   {account:"Ben", name:"Founder — Bare Min",  aud:"Founder",   region:"AU", leads:133, accepted:15, acc:19.0, replies:1, rep:1.3, launched:"2 Jun"},
   {account:"Nora", name:"AUEOFY Marketeers",  aud:"EOFY", region:"AU", leads:64, accepted:6,  acc:9.4,  replies:3, rep:4.7, launched:"26 Jun"},
-  {account:"Nora", name:"AUEOFY Founders",    aud:"EOFY", region:"AU", leads:93, accepted:11, acc:11.8, replies:4, rep:4.3, launched:"26 Jun"},
+  {account:"Nora", name:"AUEOFY Founders",    aud:"EOFY", region:"AU", leads:93, accepted:11, acc:11.8, replies:17, rep:null, stale:true, launched:"26 Jun"},
 ];
 campaigns.forEach(c=> c.sent = c.acc>0 ? Math.round(c.accepted/(c.acc/100)) : 0);
 
@@ -266,6 +269,38 @@ const replies = [
    quote:"We're not looking for external support on these topics at the moment but I appreciate the connection.", note:"MD; polite decline after the FY27 game-plan link."},
   {account:"Nora", name:"Merwyn M", company:"RUD Australia", aud:"EOFY", region:"AU", campaign:"AUEOFY Marketeers", cat:"Not a fit / nurture",
    quote:"Happy to connect and you can always use my network. But not looking for support.", note:"Group Marketing Manager; polite decline."},
+  // ===== Nora — new batch, 9–12 Jul =====
+  {account:"Nora", name:"Jamie Ramage", company:"Ramage Rural / RD Creative", aud:"EOFY", region:"AU", campaign:"AUEOFY Founders", cat:"Interested",
+   quote:"Shoot me some of your work and I will take a look over the weekend — jamie@rdcreativestudio.com.au", note:"Not a manufacturer but services the sector (Ag-aligned). Referral/partnership angle both ways. WE OWE: send work samples."},
+  {account:"Nora", name:"Mark Roe", company:"Fusetec", aud:"EOFY", region:"AU", campaign:"AUEOFY Founders", cat:"Engaged",
+   quote:"my head is split between the two.. Juggling", note:"Already exporting surgical training models globally. Nora asked for 30 mins; awaiting his reply."},
+  {account:"Nora", name:"Thewarit Jenner", company:"PST-Group Consulting", aud:"EOFY", region:"AU", campaign:"AUEOFY Founders", cat:"Engaged",
+   quote:"Hi Nora, I dont understands the ask her.", note:"Confused by the discovery question. WE OWE: rephrase in plain terms."},
+  {account:"Nora", name:"Ross Newman", company:"Astute Systems", aud:"EOFY", region:"AU", campaign:"AUEOFY Founders", cat:"Engaged",
+   quote:"We use veterans for defence engagements in Europe. We don't do much in Australia. … UK", note:"UK/Europe focused, little AU work. Live thread but no buying signal."},
+  {account:"Nora", name:"Aaron Stevens", company:"Praxis360", aud:"EOFY", region:"AU", campaign:"AUEOFY Founders", cat:"Soft positive",
+   quote:"Happy to connect, thanks Nora.", note:"Nora pitched digital setup / FY growth; awaiting reply."},
+  {account:"Nora", name:"Grant Swart", company:"Mayne Pharma", aud:"EOFY", region:"AU", campaign:"AUEOFY Founders", cat:"Soft positive",
+   quote:"Hello Nora, Glad to connect.", note:"Nora's discovery question awaiting reply."},
+  {account:"Nora", name:"Michael Davis", company:"M Squared Infrastructure", aud:"EOFY", region:"AU", campaign:"AUEOFY Founders", cat:"Soft positive",
+   quote:"I'm happy to connect", note:"WE OWE: no discovery question sent yet."},
+  {account:"Nora", name:"Mark Platt", company:"Aussie Printhouse", aud:"EOFY", region:"AU", campaign:"AUEOFY Founders", cat:"Soft positive",
+   quote:"Happy to connect Nora", note:"WE OWE: no discovery question sent yet."},
+  {account:"Nora", name:"Lindsay Lyon", company:"GIAGO", aud:"EOFY", region:"AU", campaign:"AUEOFY Founders", cat:"Not now / timing",
+   quote:"We're pre revenue, to early", note:"Pre-revenue. Revisit down the track."},
+  {account:"Nora", name:"Eamon Wood", company:"Nudge Assist", aud:"EOFY", region:"AU", campaign:"AUEOFY Founders", cat:"Not a fit / nurture",
+   quote:"I am currently not a manufacturer, mostly an importer of products. Happy to stay connected", note:"Importer, not a manufacturer. List-hygiene note."},
+  {account:"Nora", name:"Simon Yeoman", company:"Unified Honey", aud:"EOFY", region:"AU", campaign:"AUEOFY Founders", cat:"Not a fit / nurture",
+   quote:"We're ok for now, good to connect", note:"Polite brush-off."},
+  {account:"Nora", name:"Mark A. Tipping", company:"EDEA Energy", aud:"EOFY", region:"AU", campaign:"AUEOFY Founders", cat:"Not a fit / nurture",
+   quote:"We do not have a demand or market-entry problem. Our current constraint is supply and delivery capacity, so growth support is not something we are looking for.", note:"Clear, well-qualified decline. Supply-constrained, not demand-constrained."},
+  {account:"Nora", name:"Mark Anderson", company:"Gevolve Solutions / FISH", aud:"EOFY", region:"AU", campaign:"AUEOFY Founders", cat:"Not a fit / nurture",
+   quote:"I thought you may be interested to learn more about the work of FISH… join the FISH 250 Club", note:"Reverse-pitched us. Not a prospect."},
+  // ===== Ben — 2 further EOFY declines (names not recorded) =====
+  {account:"Ben", name:"Unnamed lead", company:"—", aud:"EOFY", region:"AU", campaign:"ManufacturingAUEOFY", cat:"Not a fit / nurture",
+   quote:"", note:"Not a fit. Name not recorded."},
+  {account:"Ben", name:"Unnamed lead", company:"—", aud:"EOFY", region:"AU", campaign:"ManufacturingAUEOFY", cat:"Not a fit / nurture",
+   quote:"", note:"Not a fit. Name not recorded."},
 ];
 
 // ---------- STATE + FILTER UI ----------
@@ -331,20 +366,30 @@ function render(){
   const repPct=sent? reps/sent*100 : 0;
   const converted=rs.filter(r=>r.cat==="Converted").length;
   const interested=rs.filter(r=>r.cat==="Interested").length;
+  const anyStale=cs.some(c=>c.stale);
+  const staleNames=cs.filter(c=>c.stale).map(c=>c.name).join(", ");
+
+  const sn=document.getElementById("staleNote");
+  sn.innerHTML = anyStale
+    ? `<div style="background:rgba(225,112,85,.10);border:1px solid rgba(225,112,85,.35);border-left:3px solid var(--warn);border-radius:9px;padding:11px 14px;margin-top:12px;font-size:12.5px;color:#f0cfc5">
+         <b style="color:var(--warn)">Send figures pending refresh.</b> ${staleNames} have grown since the last Dripify pull, so their leads / accepted / sent numbers are stale. Reply <b>rates</b> are suppressed rather than shown wrong. Reply <b>classification</b> and <b>Positive %</b> are fully current.
+       </div>` : "";
 
   document.getElementById("kpis").innerHTML = `
     <div class="card kpi"><div class="label">Campaigns</div><div class="val">${cs.length}</div><div class="note">${leads.toLocaleString()} leads</div></div>
-    <div class="card kpi"><div class="label">Acceptance rate</div><div class="val accent">${sent?"≈"+fmt1(accPct)+"%":"—"}</div><div class="note">${accepted} accepted${sent?" of ≈"+sent+" sent":""}</div></div>
-    <div class="card kpi"><div class="label">Reply rate</div><div class="val green">${sent?"≈"+fmt1(repPct)+"%":"—"}</div><div class="note">${reps} repl${reps===1?"y":"ies"}</div></div>
+    <div class="card kpi"><div class="label">Acceptance rate</div><div class="val accent">${anyStale?"—":(sent?"≈"+fmt1(accPct)+"%":"—")}</div><div class="note">${accepted} accepted${anyStale?" · pending refresh":(sent?" of ≈"+sent+" sent":"")}</div></div>
+    <div class="card kpi"><div class="label">Replies</div><div class="val green">${reps}</div><div class="note">${anyStale?"rate pending refresh":"≈"+fmt1(repPct)+"% reply rate"}</div></div>
     <div class="card kpi"><div class="label">Converted</div><div class="val">${converted}</div><div class="note">${interested} interested</div></div>`;
 
   const ab=document.getElementById("acceptBars"); ab.innerHTML="";
   const rb=document.getElementById("replyBars"); rb.innerHTML="";
   if(!cs.length){ ab.innerHTML='<div class="empty">No campaigns match this filter.</div>'; rb.innerHTML='<div class="empty">No campaigns match this filter.</div>'; }
   else{
-    const maxA=Math.max(...cs.map(c=>c.acc),1), maxR=Math.max(...cs.map(c=>c.rep),1);
+    const repCs=cs.filter(c=>c.rep!=null);
+    const maxA=Math.max(...cs.map(c=>c.acc),1), maxR=Math.max(...repCs.map(c=>c.rep),1);
     cs.forEach(c=> barRow(ab, prettyLabel(c), c.acc, "%", "#6c5ce7", maxA));
-    cs.forEach(c=> barRow(rb, prettyLabel(c), c.rep, "%", "#00b894", maxR));
+    if(!repCs.length) rb.innerHTML='<div class="empty">Reply rates pending refresh.</div>';
+    else repCs.forEach(c=> barRow(rb, prettyLabel(c), c.rep, "%", "#00b894", maxR));
   }
 
   const tb=document.getElementById("tblBody"); tb.innerHTML="";
@@ -356,7 +401,7 @@ function render(){
       <td><span class="pill aud-${c.aud}">${c.aud}</span></td>
       <td><span class="pill reg-${c.region}">${c.region}</span></td>
       <td class="num">${c.leads}</td><td class="num">${c.accepted}</td><td class="num">${fmt1(c.acc)}%</td>
-      <td class="num">${c.replies}</td><td class="num">${fmt1(c.rep)}%</td><td class="num">${c.launched}</td>`;
+      <td class="num">${c.replies}</td><td class="num">${c.rep==null?'<span style="color:var(--warn)">pending</span>':fmt1(c.rep)+'%'}</td><td class="num">${c.launched}</td>`;
     tb.appendChild(tr);
   });
 
@@ -376,7 +421,8 @@ function render(){
         const posPct=vr.length?Math.round(pos/vr.length*100):0;
         const posCls=posPct>=30?'hot':(posPct>0?'warm':'z');
         const snt=sentForV(v);
-        const rr=snt?fmt1(vr.length/snt*100)+"%":"—";
+        const staleV=cs.some(c=>variantOf(c.name)===v && c.stale);
+        const rr=staleV?'<span style="color:var(--warn)">pending</span>':(snt?fmt1(vr.length/snt*100)+"%":"—");
         h+=`<tr><td class="v">${v}</td><td class="num">${vr.length}</td><td class="num" style="color:var(--muted)">${rr}</td><td class="num ${posCls}">${vr.length?posPct+'%':'·'}</td>`;
         cats.forEach(c=>{ const n=vr.filter(r=>r.cat===c.key).length; const cls=n===0?'z':c.key==="Converted"?'hot':c.key==="Interested"?'warm':''; h+=`<td class="num ${cls}">${n||'·'}</td>`; });
         h+='</tr>';
