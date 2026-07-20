@@ -169,7 +169,7 @@
     <b>Methodology.</b> Reconciled 13 Jul 2026 against the full Dripify thread exports for both accounts (Ben, and Nora via team sign-in).
     Acceptance % and Reply % are Dripify's reported per-campaign rates (denominator = LinkedIn invites sent).
     Aggregate rates in the KPI cards are derived (invites&nbsp;sent &asymp; accepted &divide; acceptance&nbsp;%) and are approximate because Dripify rounds its percentages.
-    59 replies across both accounts, all read and classified from the actual conversation threads. Two Ben EOFY declines are logged as counts only (names not recorded).
+    67 replies across both accounts, all read and classified from the actual conversation threads. Two Ben EOFY declines are logged as counts only (names not recorded).
     ManufacturingAUEOFY and AUEOFY Founders have grown since the last campaign-stats pull, so their send/acceptance figures are stale and their reply rates are suppressed until refreshed.
     Nora's campaigns are both EOFY (AU). Dripify has no public API — re-run to refresh.
   </footer>
@@ -193,7 +193,7 @@ const campaigns = [
   {account:"Ben", name:"Founder — Persona",   aud:"Founder",   region:"AU", leads:134, accepted:15, acc:19.0, replies:2, rep:2.5, launched:"2 Jun"},
   {account:"Ben", name:"Founder — Bare Min",  aud:"Founder",   region:"AU", leads:133, accepted:15, acc:19.0, replies:1, rep:1.3, launched:"2 Jun"},
   {account:"Nora", name:"AUEOFY Marketeers",  aud:"EOFY", region:"AU", leads:64, accepted:6,  acc:9.4,  replies:3, rep:4.7, launched:"26 Jun"},
-  {account:"Nora", name:"AUEOFY Founders",    aud:"EOFY", region:"AU", leads:93, accepted:11, acc:11.8, replies:30, rep:null, stale:true, launched:"26 Jun"},
+  {account:"Nora", name:"AUEOFY Founders",    aud:"EOFY", region:"AU", leads:93, accepted:11, acc:11.8, replies:38, rep:null, stale:true, launched:"26 Jun"},
 ];
 campaigns.forEach(c=> c.sent = c.acc>0 ? Math.round(c.accepted/(c.acc/100)) : 0);
 
@@ -331,10 +331,27 @@ const replies = [
    quote:"Not looking for any services at the moment", note:"Polite decline."},
   {account:"Nora", name:"Andy Warrington", company:"Safety Glasses Onsite", aud:"EOFY", region:"AU", campaign:"AUEOFY Founders", cat:"Engaged",
    quote:"for other products we have we can sell there [NZ] through one of our largest customers.", note:"Retailer (not mfg) but a live NZ market-entry angle opened up; Nora proposed 30 mins, awaiting."},
-  {account:"Nora", name:"Hamid Ghare", company:"Eastern Pharmaceutical Group", aud:"EOFY", region:"AU", campaign:"AUEOFY Founders", cat:"Soft positive",
-   quote:"Thanks, Nora", note:"Friendly acknowledgement; no discovery question sent yet. WE OWE."},
+  {account:"Nora", name:"Hamid Ghare", company:"Eastern Pharmaceutical Group", aud:"EOFY", region:"AU", campaign:"AUEOFY Founders", cat:"Converted",
+   quote:"Thanks, Nora", note:"Demo booked."},
   {account:"Nora", name:"Trent Miles", company:"Miles Industry Advisory", aud:"EOFY", region:"AU", campaign:"AUEOFY Founders", cat:"Soft positive",
    quote:"👍", note:"Thumbs-up on connect; no discovery question sent yet. WE OWE."},
+  {account:"Nora", name:"Prof Ray Wills", company:"Future Smart Strategies", aud:"EOFY", region:"AU", campaign:"AUEOFY Founders", cat:"Soft positive",
+   quote:"Thanks Nora", note:"MD/futurist; friendly acknowledgement, no discovery question sent yet. WE OWE."},
+  {account:"Nora", name:"Robert Sercia", company:"Creative Print and Marketing", aud:"EOFY", region:"AU", campaign:"AUEOFY Founders", cat:"Not a fit / nurture",
+   quote:"Thanks Nora, but OK at this stage.", note:"Declined after the FY27 game-plan link."},
+  {account:"Nora", name:"Tod O'Connor", company:"Patel & O'Connor Consulting", aud:"EOFY", region:"AU", campaign:"AUEOFY Founders", cat:"Not a fit / nurture",
+   quote:"We are only a small start-up… using my Indian Partners connections to bring product into Australia.", note:"Tiny startup, importer (product in, not export). Not a fit."},
+  // ===== Nora — batch, 14–18 Jul =====
+  {account:"Nora", name:"Luke Moriarty", company:"Avid Edge", aud:"EOFY", region:"AU", campaign:"AUEOFY Founders", cat:"Engaged",
+   quote:"Hi Nora, what are you selling?", note:"Direct opener; Nora explained the offer, awaiting his response."},
+  {account:"Nora", name:"Tony Curran", company:"POWER4", aud:"EOFY", region:"AU", campaign:"AUEOFY Founders", cat:"Soft positive",
+   quote:"Thanks Nora, nice to connect here.", note:"Friendly connect; no discovery question sent yet. WE OWE."},
+  {account:"Nora", name:"Amir Hooshang Taheri", company:"Voltavate", aud:"EOFY", region:"AU", campaign:"AUEOFY Founders", cat:"Soft positive",
+   quote:"Hello Nora, happy to connect. Regards, Amir", note:"Friendly connect; no discovery question sent yet. WE OWE."},
+  {account:"Nora", name:"Matt Davey", company:"Squinters Brewing Co", aud:"EOFY", region:"AU", campaign:"AUEOFY Founders", cat:"Not a fit / nurture",
+   quote:"We are fairly busy. Thanks Matt", note:"Polite brush-off."},
+  {account:"Nora", name:"Stephen Beckett", company:"Airlines for Australia and New Zealand", aud:"EOFY", region:"AU", campaign:"AUEOFY Founders", cat:"Not a fit / nurture",
+   quote:"I'm not in manufacturing", note:"Industry association, not a manufacturer (data mismatch)."},
 ];
 
 // ---------- STATE + FILTER UI ----------
